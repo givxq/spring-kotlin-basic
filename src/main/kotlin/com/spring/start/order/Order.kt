@@ -5,4 +5,6 @@ data class Order(
     var itemName: String,
     var itemPrice: Int,
     var discountPrice: Int,
-)
+) {
+    fun calculatePrice() = itemPrice - discountPrice
+}

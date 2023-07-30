@@ -1,9 +1,9 @@
 package com.spring.start.member
 
 class MemberServiceImpl(
-//    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository
 ) : MemberService {
-    private val memberRepository = MemoryMemberRepository()
+//    private val memberRepository = MemoryMemberRepository()
 
     override fun join(member: Member) {
         memberRepository.save(member)

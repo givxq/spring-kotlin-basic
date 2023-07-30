@@ -1,14 +1,24 @@
 package com.spring.start.order
 
+import com.spring.start.AppConfig
 import com.spring.start.member.Grade
 import com.spring.start.member.Member
+import com.spring.start.member.MemberService
 import com.spring.start.member.MemberServiceImpl
 import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class OrderServiceTest {
-    private val memberService = MemberServiceImpl()
-    private val orderService = OrderServiceImpl()
+    private lateinit var memberService: MemberService
+    private lateinit var orderService: OrderService
+
+    @BeforeEach
+    fun beforeEach() {
+        val appConfig = AppConfig()
+        memberService = appConfig.memberService()
+        orderService = appConfig.orderService()
+    }
 
     @Test
     fun createOrder() {

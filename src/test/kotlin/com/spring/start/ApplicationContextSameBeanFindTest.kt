@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException
+import org.springframework.beans.factory.getBeansOfType
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -27,6 +28,12 @@ class ApplicationContextSameBeanFindTest {
     fun findBeanByName() {
         val memberRepository = ac.getBean("memberRepository1", MemberRepository::class.java)
         assertThat(memberRepository).isInstanceOf(MemberRepository::class.java)
+    }
+
+    @Test
+    @DisplayName("특정 타입을 모두 조회하기")
+    fun findAllBeanByType() {
+        val beansOfType = ac.getBeansOfType(MemberRepository::class.java)
     }
 
     @Configuration

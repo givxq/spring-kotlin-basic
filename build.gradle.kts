@@ -35,6 +35,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude("org.junit.vintage", "junit-vintage-engine")
     }
+    testImplementation("io.kotest:kotest-runner-junit5:5.6.2")
 }
 
 tasks.withType<KotlinCompile> {

@@ -26,7 +26,7 @@ class SingletonWithPrototypeTest : ShouldSpec({
         var count = 0
 
         listOf(
-           ac.getBean(ClientBeanWithSingleton::class.java), ac.getBean(ClientBeanWithSingleton::class.java)
+            ac.getBean(ClientBeanWithSingleton::class.java), ac.getBean(ClientBeanWithSingleton::class.java)
         ).forEach {
             it.logic() shouldBe ++count
         }
@@ -41,6 +41,7 @@ class SingletonWithPrototypeTest : ShouldSpec({
             it.logic() shouldBe 1
         }
     }
+
 }) {
     @Scope
     internal class ClientBeanWithSingleton(private val prototypeBean: PrototypeBean) {
@@ -51,7 +52,9 @@ class SingletonWithPrototypeTest : ShouldSpec({
     }
 
     @Scope
-    internal class ClientBean(private val prototypeBeanProvider: ObjectProvider<PrototypeBean>) {
+    internal class ClientBean(
+        private val prototypeBeanProvider: ObjectProvider<PrototypeBean>
+    ) {
         fun logic(): Int {
             val prototypeBean = prototypeBeanProvider.getObject()
             prototypeBean.addCount()

@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
+import org.springframework.beans.factory.ObjectProvider
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Scope
 
@@ -21,19 +22,38 @@ class SingletonWithPrototypeTest : ShouldSpec({
     }
 
     should("singleton client use prototype") {
-        val ac = AnnotationConfigApplicationContext(ClientBean::class.java, PrototypeBean::class.java)
+        val ac = AnnotationConfigApplicationContext(ClientBeanWithSingleton::class.java, PrototypeBean::class.java)
         var count = 0
 
         listOf(
-           ac.getBean(ClientBean::class.java), ac.getBean(ClientBean::class.java)
+           ac.getBean(ClientBeanWithSingleton::class.java), ac.getBean(ClientBeanWithSingleton::class.java)
         ).forEach {
             it.logic() shouldBe ++count
         }
     }
+
+    should("singleton with prototype") {
+        val ac = AnnotationConfigApplicationContext(ClientBean::class.java, PrototypeBean::class.java)
+
+        listOf(
+            ac.getBean(ClientBean::class.java), ac.getBean(ClientBean::class.java)
+        ).forEach {
+            it.logic() shouldBe 1
+        }
+    }
 }) {
     @Scope
-    internal class ClientBean(private val prototypeBean: PrototypeBean) {
+    internal class ClientBeanWithSingleton(private val prototypeBean: PrototypeBean) {
         fun logic(): Int {
+            prototypeBean.addCount()
+            return prototypeBean.count
+        }
+    }
+
+    @Scope
+    internal class ClientBean(private val prototypeBeanProvider: ObjectProvider<PrototypeBean>) {
+        fun logic(): Int {
+            val prototypeBean = prototypeBeanProvider.getObject()
             prototypeBean.addCount()
             return prototypeBean.count
         }
